@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}.:Negocio:.{% endblock %}
+{% block contenidos %}
+<link rel="stylesheet" type="text/css" href="/static/css/styleLi.css">
+<div id='info'>
+	<p>Detalles Del Negocio:</p>
+	<ul>
+		<li><a href="/registros/{{negocio.id}}/">{{negocio.propietario}}   {{negocio.memorial_apertura}}</a>
+	</li>
+		<li><a href="/eliminarN/{{negocio.id}}/">Eliminar</a>|<a href="/datosDenuncia/{{negocio.id}}/">Datos</a></li>
+	</ul>
+</div>
+{% endblock %}

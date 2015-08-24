@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}.:Inspector:.{% endblock %}
+{% block contenidos %}
+<link rel="stylesheet" type="text/css" href="/static/css/formularios.css">
+<style type="text/css">
+	#leftt{
+		display: none;
+	} 
+</style>
+<script type="text/javascript">
+	function ventanaSecundaria(URL){
+                window.open(URL,"Editar","width=500,height=300,scrollbars=NO top=150 left=550");
+            } 
+</script>
+<div class="card" id="comentario">
+	{% for i in inspecciones %}
+		{% for j in nego %}
+			{% if j.id == i.Codigo %}
+					<li>{{i.descripcion}}<label>: Fecha de Notificacion:</label>
+		<a href="javascript:ventanaSecundaria('/detDenuncias/{{i.id}}/')">{{i.fecha_notificacion}}</a></li>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+	<li><a href="/TodaslasNotificaciones/">Ver todos</a></li>
+</div>
+{% endblock %}

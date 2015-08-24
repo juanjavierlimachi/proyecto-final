@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}.:Nuevo:.{% endblock %}
+{% block contenidos %}
+<link rel="stylesheet" type="text/css" href="/static/css/formularios.css">
+<script type="text/javascript">
+  function verificar(){
+    var pro= $('#id_propietario').val();
+    var memorial=$('#id_memorial_apertura').val();
+    var resolucion=$('#id_resolucion_municipal').val();
+    if (pro=='' || memorial=='' || resolucion ==''){
+      alert('Dejo un campo en blanco');
+      return false;
+    }
+  }
+</script>
+ <div class="card">
+            <form method="POST" action="" onsubmit='return verificar()'>{% csrf_token %} 
+              {{formulario}}<br>
+              <button class="waves-effect waves-light btn" type="submit"
+       onsubmit='verificar()'>Guardar</button> 
+  <!--onclick="this.disabled=true; this.value='Guardando...!'; this.form.submit()"-->
+            </form>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#lista').hide();
+	$('#ver').click(function(){
+		$('#lista').show(1000);
+	});
+
+});
+</script>
+{% endblock %}

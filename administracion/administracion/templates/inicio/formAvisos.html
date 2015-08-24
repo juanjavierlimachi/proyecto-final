@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}.:Denuncias:.{% endblock %}
+{% block js %}
+	<script type="text/javascript">
+		$(document).on('ready',Informar);
+		function Informar(){
+			$('#boton').click(function(e){
+				e.preventDefault();
+				var dato=$('#texto').val();
+				if (dato==''){
+					alert('Escriba una Notificacion');
+					return false;
+				}
+					else{
+						socket.emit('Aviso',dato);
+					}
+				});
+			}
+		socket.on('Avisos',Respuesta);
+		function Respuesta(data){
+			alert('Notificacion: '+data);
+		}
+	</script>
+{% endblock %}
+{% block contenidos %}
+<link rel="stylesheet" type="text/css" href="/static/css/formularios.css">
+	<div class="card">
+		<p>Enviar Notificacion</p>
+		<form onsubmit='return verificar()'>
+			<input type='text' id='texto' required>
+			<button id='boton'>Informar</button>
+		</form>
+	</div>
+{% endblock %}

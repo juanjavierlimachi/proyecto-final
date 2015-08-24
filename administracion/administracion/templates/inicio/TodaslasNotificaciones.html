@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}.:Denuncias:.{% endblock %}
+{% block js %}
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#fecha').on('change',Datos);
+		function Datos(){
+			var fecha = $(this).val();
+			console.log(fecha);
+			$.ajax({
+				type:'get',
+				url:'/ConsultarDenunciaFecha/',
+				data:{'fecha':fecha},
+				success:function(data){
+					//console.log(data);
+					var html=""
+					for(var i = 0; i<data.length; i++){
+						var Id=data[i].fields.id;
+						console.log(Id);
+						html += '<li>'+(i+1)+' .-<a href="/views/'+data[i].fields.Id+'/">ver</a>'
+						+data[i].fields.Usuario+':  Fecha de Not.:  '+data[i].fields.fecha_notificacion+'  Descricion:  '+data[i].fields.descripcion+'</li><br>';
+					}
+					$('.resultados').html(html);
+				}
+			});
+		}
+		
+		$('#fer').on('click',	iniciar);
+			function iniciar(e){
+				e.preventDefault();
+				var fecha={
+					'fe':$('#campo_fecha').val(),
+					'fn':$('#campo_fecha_fin').val()
+				}
+				console.log(fecha);
+				if(fecha.fe.length == 0 || fecha.fn.length == 0){
+					alert('Debe introducir una fecha');
+					return false;
+				}
+				else{
+					$.ajax({
+					type:'get',
+					url:'/ConsultarDenunciaFecha/',
+					data: fecha,
+					success:function(data){
+						console.log(data);
+						var html=""
+						for(var i = 0; i<data.length; i++){
+							html += '<li>'+(i+1)+' .- '+data[i].fields.Usuario+data[i].fields.id+':  Descricion:  '+data[i].fields.descripcion+'</li><br>';
+						}
+							$('#notiii').html(html);
+						}
+					});
+				}
+		}
+		Calendar.setup({
+		        inputField     :    "campo_fecha",      // id del campo de texto
+		        ifFormat       :    "%Y-%m-%d",       // formato de la fecha, cuando se escriba en el campo de texto
+		        button         :    "lanzador"   // el id del botón que lanzará el calendario
+		    });
+		Calendar.setup({
+		        inputField     :    "campo_fecha_fin",      // id del campo de texto
+		        ifFormat       :    "%Y-%m-%d",       // formato de la fecha, cuando se escriba en el campo de texto
+		        button         :    "lanzador2"   // el id del botón que lanzará el calendario
+		    });
+		
+    });
+function ventanaSecundaria(URL){
+                window.open(URL,"Editar","width=500,height=300,scrollbars=NO top=150 left=550");
+            } 
+</script>
+<link rel="stylesheet" type="text/css" media="all" href="{{STATIC_URL}}css/calendar-green.css" title="win2k-cold-1" />
+  <!-- librería principal del calendario -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/calendar.js"></script>
+  <!-- librería para cargar el lenguaje deseado -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/calendar-es.js"></script>
+  <!-- librería que declara la función Calendar.setup, que ayuda a generar un calendario en unas pocas líneas de código -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/calendar-setup.js"></script>
+{% endblock %}
+{% block contenidos %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/listas.css">
+<div class="card">
+	<p>Lista de Notificaciones Gestion : {% now "Y" %}</p>
+			<!-- <select id='fecha'><option>Año</option>
+					<option value='2015-07-11'>2015-07-11</option>
+					<option value='2015-07-04'>2015-07-04</option>
+					<option value='2014-07-04'>2014-07-04</option>
+			</select> -->
+			<form method='get' id='filtro'>{% csrf_token %}
+				<input type='text' name="date"  id="campo_fecha" placeholder='Año-Mes-Dia'>
+				<input type="button" id="lanzador" value="..." />
+				<input type='text' name='fnn' id='campo_fecha_fin' placeholder='Año-Mes-Dia'>
+				<input type="button" id="lanzador2" value="..." />
+				<button id='fer'>Ver</button>
+			</form>
+	{%  for i in ns %}
+		<ul class='nn'>
+			<li>Nombre de Usuario:  {{i.Usuario}}      Fecha de Notificacion: {{i.fecha_notificacion}}</li>
+		<li>Descricion: {{i.descripcion}}</li>
+		<li>Fecha de Presentacion : {{i.fecha_presentacion}}   Hora: {{i.hora}}
+			<a href="javascript:ventanaSecundaria('/detDenuncias/{{i.id}}/')" title='Ver Comparendo'>Ver</a></li>
+		</ul>	
+	{% endfor %}
+</div>
+{% endblock %}

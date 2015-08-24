@@ -1,0 +1,13 @@
+<html>
+<head>
+	<title>Editar</title>
+</head>
+<body>
+<div class="card">
+	<form method='POST'>{% csrf_token %}
+		<table>{{form}}</table>
+		<input type='submit' value='Guardar Canbios'>
+	</form>
+</div>	
+</body>
+</html>

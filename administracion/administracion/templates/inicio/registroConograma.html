@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}.:Denuncias:.{% endblock %}
+{% block contenidos %}
+	<link rel="stylesheet" type="text/css" href="/static/css/formularios.css">
+	<style type="text/css">
+		.card p{
+			text-align: center;
+		}
+		.select-wrapper{
+			width: 22%;height: auto;float: right;margin-left: 0px; margin: auto;
+
+		}
+		.select-wrapper select{
+			margin-right: -10px;
+		}
+		
+	</style>
+	<div class="card">
+		<p>Registro de Cronograma de Trabajo</p>
+		<form method='POST'>{% csrf_token %}
+			{{form}}
+			<input type='submit' value='Guardar'>
+		</form>
+	</div>
+{% endblock %}

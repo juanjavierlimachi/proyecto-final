@@ -1,0 +1,19 @@
+{% extends 'inspector/inicio_inspector.html' %}
+{% block user %}{{user}}{% endblock %}
+{% block inspecciones %}
+<link rel="stylesheet" type="text/css" href="/static/css/frontends.css">
+<link rel="stylesheet" type="text/css" href="/static/css/formularios.css">
+	<div class="card">
+		<p>Datos de Perfil</p>
+		{% for i in perfil %}
+			{% for d in dato %}
+				{% if i.id == d.usuario_id %}
+					<li>Nombre de Usuario: {{i.username}}</li>
+					<li>Nombre(s): {{i.first_name}}</li>
+					<li>Apellidos: {{i.last_name}}</li>
+					<li>Num de Ci: {{d.ci}}</li>
+				{% endif %}
+			{% endfor %}
+		{% endfor %}	
+	</div>	
+{% endblock %}

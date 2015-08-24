@@ -1,0 +1,16 @@
+#leftt{display: none;}
+	.nn{width: 90%; height: auto; margin: auto;
+		margin-top: 10px;border: 2 solid black;
+	}
+	.nn li{
+		list-style: none;
+	}
+.card p{width: 35%;
+	text-align: center;color: black;height: 30px;margin: auto;
+}
+.card p #fecha{
+	width: 200px;float: left; margin-left: 20px;
+}
+.card #filtro{
+	width: 48%;height: 30px;margin: auto;
+}

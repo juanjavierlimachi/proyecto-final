@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block contenidos %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/listas.css">
+	<div class='card'>
+		<a href="/busqueda/">Buscar Negocio</a>
+		<div>
+			<select>
+				<option>Seleccione una categoria</option>
+				{% for i in categorias %}
+					<option value='{{i.id}}'>{{i.categoria}}</option>
+				{% endfor %}
+			</select>
+		</div>
+	{% for negosio in negosios %}
+		<ul class='nn'>
+			<li>PROPIETARIO: <a href="/detalleNegocio/{{negosio.id}}/">{{negosio.propietario}}{{negosio.id}}</a></li>
+		<li>MEMORIAL DE APERTURA:  {{negosio.memorial_apertura}}</li>
+		<li>RESOLUCION MUNICIPAL:  {{negosio.resolucion_municipal}}</li>
+		</ul>	
+	{% endfor %}
+	</div>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+	$('select').on('change',inicio);
+	function inicio(){
+		var id = $(this).val();
+		console.log(id); //aki vemos k el id se esta inprimiendo
+		$.ajax({
+			data:{'id':id},
+			url:'/busqueda_ajax/',
+			type: 'get',
+			success: function(data){
+				//console.log(data);
+				var html=""
+				for(var i = 0; i<data.length; i++){
+					html += '<li>'+(i+1)+' .- '+data[i].fields.propietario+'<a href="/er/{{data.id}}/">'+data[i].fields.memorial_apertura+'</a></li>';
+				}
+				$('#resultados').html(html);
+			}
+		});
+	}
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+<html>
+<head>
+	<title>Notificacion</title>
+	<style type="text/css">
+		.card{
+			width: 100%;
+		}
+		.card table{
+			width: 100%;
+			border-collapse: collapse;
+		}
+	</style>
+</head>
+<body>
+<div class="card">
+	<!-- <li>Nombre Inspector:{{denuncia.Usuario}}</li>
+	<li>Fecha de notificacion: {{denuncia.fecha_notificacion}}</li>
+	<li>Objeto: {{denuncia.descripcion}}</li>
+	<li>Fecha de presentacion: {{denuncia.fecha_presentacion}}</li>
+	<li>Hora de presentacion: {{denuncia.hora}}</li> -->
+<table border=1>
+	<tr><td>H.G.M.P </td><td>Nro:1</td></tr>
+	<tr><td colspan="2" align='center'>COMPARENDO</td></tr>
+	{% for i in denuncia %}
+		<tr><td colspan="2">Objeto: {{i.descripcion}}</td></tr>
+		{% for j in nombre %}
+			{% if j.id == i.Codigo %}
+				<tr><td colspan="2">Sr(s):{{j.propietario}}</td></tr>
+				<tr><td colspan="2">Direccion: {{j.direccion}}</td></tr>
+				<tr><td>Fecha de Presentacion en Oficina: {{i.fecha_presentacion}} </td><td>Horas: {{i.hora}}</td></tr>
+				<tr><td colspan="2">Fecha de Notificacion: {{i.fecha_notificacion}}</td></tr>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+</table>
+</div>
+</body>
+</html>

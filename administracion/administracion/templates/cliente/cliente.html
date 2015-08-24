@@ -1,0 +1,95 @@
+{% extends 'cliente/denuncia.html' %}
+{% block cliente %}
+<link rel="stylesheet" type="text/css" href="/static/css/formulariosCliente.css">
+<h2>Bienvenido: {{name}} </h2>
+<hr>
+<style type="text/css">
+	#form{
+		display: none;
+	}
+	h3{
+		display: none;
+	}
+</style>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
+<script type="text/javascript">
+$(document).ready(function() {
+$(".contador").each(function(){
+	var longitud = $(this).val().length;
+			$(this).parent().find('#longitud_textarea').html('Escriba un maximo 250 caracteres'+longitud);
+			$(this).keyup(function(){ 
+				var nueva_longitud = $(this).val().length;
+				$('#longitud_textarea').html('Escriba un maximo 250 caracteres:        '+nueva_longitud);
+				if (nueva_longitud >= 10) {
+					$('#longitud_textarea').css('color', 'red');
+				}
+				else{
+					$('#longitud_textarea').css('color', 'black');	
+				}
+			});
+		});
+});
+function esconde(form){
+		if (form.comment.value !=""){
+			form.enviar.style.visibility = "visible";
+		}
+		else{
+			form.enviar.style.visibility = "hidden";
+		}
+	}
+</script>
+</head>
+<div id='comentario'>
+	{% for comment in comments %}
+		<li>{{ comment.user}} .- dice:  {{comment.comment}}</li>
+	{% endfor %} 
+
+</div>
+<li>Codigo traido del la plantilla denuncas:{{codd}}</li>
+<li>Negocio a denunciar::{{nego.propietario}}</li><br>
+<div id="longitud_textarea"></div>
+<div class="card">
+<form method='POST'>{% csrf_token %}
+	<textarea cols="40" id="id_comment" class="contador" name="comment" rows="10"
+	 onKeyUp="esconde(this.form)" required>
+	</textarea> 
+	<input type='text' name='idNegocio' id='id_idNegocio' value='{{codd.id}}' required><br>
+	<!-- <input type='text' name='paran' value=> -->
+	<button id ="boton" name="enviar"
+	 onclick="this.disabled=true; this.value='Enviando...'; this.form.submit()" 
+	 style="visibility: hidden">Denumciar</button>
+</form>
+</div>
+<script src="/static/js/jquery.min3.js"></script>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script>
+
+	var socket = io.connect("http://localhost:3000");
+	$('#boton').on('click',	Comentar);
+	function Comentar(e){
+		console.log('click');
+		e.preventDefault();
+		var datos = {//son los datos que recuperamos del formulario
+			user: "{{name}}",
+			comment:$('#id_comment').val(),
+			idNegocio:"{{codd.id}}"
+		}
+		if(datos.user.length==0 || datos.comment.length==1 || datos.idNegocio.length == 0){
+			//alert('Por favor escriba una denuncia')
+		}
+			console.log(datos);
+			socket.emit('nuevo comentario', datos);
+	}
+	socket.on('devolviendo comentario', function(data){
+		var data =JSON.parse(data);
+		$("#comentario").prepend("<p>"+data.user+ "-" +data.comment+"</p>");
+		$("#id_comment").val("");
+	});
+</script>
+{% endblock %}
+
+<!-- {% if comments %}
+	{% else %}
+	<li>{{user}}- dice:  {{comment}}</li>
+	{% endif %} -->

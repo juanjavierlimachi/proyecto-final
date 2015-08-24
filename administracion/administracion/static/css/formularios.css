@@ -1,0 +1,64 @@
+#leftt{
+        display: none;
+    }
+    .card{
+        width: 50%;height: auto;margin: auto;margin-top: 10px;border-radius: 5px;
+        margin-bottom: 50px;
+    }
+    .card p{
+        text-align: center;color: black;
+    }
+    .card form{
+        width: 80%;height: auto;margin: auto;margin-top: 5px;
+    }
+    .card form textarea{
+        width: 100%;height: 50px;border-radius: 7px;margin-top: 5px;
+    }
+    .card form label{
+        width: 150px;margin-left: 0px;display: inline-block;
+       
+    }
+    .card form input{
+        height: 20px;margin-left: 0px;display: inline-block;width:100%;
+        margin-bottom: 10px;
+    }
+    .card #id_tipo{
+        margin-bottom: 50px;
+    }
+    .card #id_tipo li{list-style: none;
+        width: 100px; height: 35px; float: left;margin-left: 5px;
+    }
+    .card #id_tipo label{
+        width: 100px;
+        float: left;
+    }
+    .card #id_tipo label input{width: 100px;
+       float: right;
+    }
+
+    #comentario{
+        width: 100%;height: auto;margin: auto;
+        background:#eee;margin-top: 10px;margin-bottom: 50px;
+    }
+  
+    #comentario li{
+        width: auto;height: 25px;list-style: none;
+        border-collapse: collapse;margin-bottom: 0px;margin-top: 0px;
+    }
+    #comentario li a{
+        color: #465866;
+    }
+    #comentario li:nth-child(odd) { background: #fff; }
+    #comentario li:hover{
+        background: #81C784;
+    }
+    #comentario li a:hover{
+        color: white; 
+    }
+    #not{
+        margin: auto;margin-right: -300px;
+    }
+
+    #longitud_textarea{
+        width: auto;height: auto;margin: auto;border: 1px solid black;
+    }

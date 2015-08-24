@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}.:Denuncias:.{% endblock %}
+{% block contenidos %}
+<link rel="stylesheet" type="text/css" href="/static/css/formularios.css">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
+<script type="text/javascript">
+$(document).ready(function() {
+
+});
+function ventanaSecundaria(URL){
+                window.open(URL,"Editar","width=500,height=300,scrollbars=NO top=150 left=550");
+    }
+</script>
+</head>
+<div id='comentario'>
+	{% for comment in comments %}
+		<li><a href="javascript:ventanaSecundaria('/DetalleDenuncias/{{comment.id}}/')">{{ comment.user}}  Denuncio:  {{comment.comment}}     Cod:{{comment.idNegocio}}</a></li>
+	{% endfor %} 
+<li class='cuenta'>Numero de Notificaciones registradas hasta la fecha: {{cont}}      <a href="/TodaslasDenuncias/">Ver Todos</a></li>
+</div>
+<!-- <li>Negocio a denunciar::{{nego.propietario}}</li><br> -->
+<div class="card">
+<form method='POST' id='for'>{% csrf_token %}
+	<input type='hidden' name='name' id='name' value='Admin' required>
+	<textarea id="id_comment" name="comment"> </textarea> 
+	<input type='text' name='idNegocio' id='id_idNegocio' value='5' required><br>
+	<!-- <input type='text' name='paran' value=>
+	onclick="this.disabled=true; this.value='Enviando...'; this.form.submit()" -->
+	<button id ="boton" name="enviar">Responder</button>
+</form>
+</div>
+<script src="/static/js/jquery.min3.js"></script>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script>
+	var socket = io.connect("http://localhost:3000");
+
+	$('#boton').on('click',	Comentar);
+	function Comentar(e){
+		e.preventDefault();
+		//son los datos que recuperamos del formulario
+		var datos = {
+			user: $('#name').val(),
+			comment:$('#id_comment').val(),
+			idNegocio:$('#id_idNegocio').val()
+		}
+		//var info=datos.comment.length;
+		if(datos.user.length==0 || datos.comment.length==1 || datos.idNegocio.length == 0){
+			alert('Por favor Escriba una Denuncia....');
+		}
+		else{
+			console.log(datos);
+			socket.emit('nuevo comentario', datos);
+		}
+	}
+	socket.on('devolviendo comentario', function(data){
+		var data =JSON.parse(data);
+		$("#comentario").prepend("<p>"+data.user+ "   Denuncio     " +data.comment+"     Cod    "+data.idNegocio+"</p>");
+		//$("#id_comment").val("");
+		$('.cuenta').html('Numero de Notificaciones registradas hasta la fecha:'+data.cont+"<a href='vertododdd'>        Ver Todos</a>")
+	}); 
+</script> 
+	{% endblock %}
+	

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}.:Nuevo:.{% endblock %}
+{% block contenidos %}
+<style type="text/css">
+#leftt{
+	display: none;
+}
+#quejas{
+	background: #fff;
+}
+	#quejas li:nth-child(odd) { background: #eee; }
+	#quejas ul li:hover{
+		background: orange;
+	}
+	#quejas ul li{
+		list-style: none;margin-bottom: 0px;
+	}
+</style>
+	<div id="quejas">
+		<ul>
+			{% for queja in quejas %}
+			<li>Cliente:{{queja.user}}    Informo:{{queja.comment}}</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'inspector/inicio_inspector.html' %}
+{% block user %}{{user}}{% endblock %}
+{% block inspecciones %}
+<link rel="stylesheet" type="text/css" href="/static/css/frontends.css">
+<link rel="stylesheet" type="text/css" href="/static/css/formularios.css">
+<script type="text/javascript">
+	function ventanaSecundaria(URL){
+                window.open(URL,"Editar","width=500,height=300,scrollbars=NO top=150 left=400");
+            } 
+</script>
+	<div class='card' id="comentario">
+	<li>Propietario: {{nego.propietario}}</li>
+	{% for i in datosN %}
+			<li><label>{{i.Usuario}}  :</label> Fecha de Notificacion:
+			<a href="javascript:ventanaSecundaria('/detaDenuncias/{{i.id}}/')">{{i.fecha_notificacion}}</a></li>
+	{% endfor %}
+	<li><a href="/VertodasNotiicaciones/{{nego.id}}/">Ver todos</a></li>
+	</div>
+{% endblock %}

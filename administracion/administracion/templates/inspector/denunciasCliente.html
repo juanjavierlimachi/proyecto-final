@@ -1,0 +1,62 @@
+{% extends 'inspector/inicio_inspector.html' %}
+{% block user %}{{user}}{% endblock %}
+{% block inspecciones %}
+<link rel="stylesheet" type="text/css" href="/static/css/frontends.css">
+<link rel="stylesheet" type="text/css" href="/static/css/formularios.css">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
+<script type="text/javascript">
+	function ventanaSecundaria(URL){
+                window.open(URL,"Editar","width=500,height=300,scrollbars=NO top=150 left=550");
+    }
+</script>
+</head>
+<div id='comentario'>
+	{% for comment in comments %}
+		<li><a  href="javascript:ventanaSecundaria('/DetalleDenuncias/{{comment.id}}/')">{{ comment.user}}  Denuncio:  {{comment.comment}}     Cod:{{comment.idNegocio}}</a></li>
+	{% endfor %} 
+
+</div>
+<!-- <li>Negocio a denunciar::{{nego.propietario}}</li><br> -->
+<div class="card">
+<form method='POST' id='for'>{% csrf_token %}
+	<input type='hidden' name='name' id='name' value='{{user}}'>
+	<textarea id="id_comment" name="comment"></textarea> 
+	<input type='text' name='idNegocio' id='id_idNegocio'><br>
+	<!-- <input type='text' name='paran' value=>
+	onclick="this.disabled=true; this.value='Enviando...'; this.form.submit()" -->
+	<button id ="boton" name="enviar">Responder</button>
+</form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script>
+
+	var socket = io.connect("http://localhost:3000");
+
+$('#boton').on('click',	Comentar);
+	function Comentar(e){
+		e.preventDefault();
+		//son los datos que recuperamos del formulario
+		var datos = {
+			user: $('#name').val(),
+			comment:$('#id_comment').val(),
+			idNegocio:$('#id_idNegocio').val()
+		}
+		//var info=datos.comment.length;
+		if(datos.user.length==0 || datos.comment.length<10 || datos.idNegocio.length == 0){
+			alert('Por favor Escruba una Denuncia....');
+			return false;
+		}
+		else{
+			console.log(datos);
+			socket.emit('nuevo comentario', datos);
+		}
+	}
+	socket.on('devolviendo comentario', function(data){
+		var data =JSON.parse(data);
+		$("#comentario").prepend("<p>"+data.user+ "   Denuncio     " +data.comment+"     Cod    "+data.idNegocio+"</p>");
+		//$("#id_comment").val("");
+	}); 
+</script> 
+	{% endblock %}

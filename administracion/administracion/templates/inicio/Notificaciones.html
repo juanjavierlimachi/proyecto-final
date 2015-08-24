@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}.:Denuncias:.{% endblock %}
+{% block js %}
+<script type="text/javascript">
+$(document).ready(function(){
+	Calendar.setup({
+		        inputField     :    "id_fecha_presentacion",      // id del campo de texto
+		        ifFormat       :    "%Y-%m-%d",       // formato de la fecha, cuando se escriba en el campo de texto
+		        button         :    "lanzador"   // el id del botón que lanzará el calendario
+		    });
+});
+</script>
+<link rel="stylesheet" type="text/css" media="all" href="{{STATIC_URL}}css/calendar-green.css" title="win2k-cold-1" />
+  <!-- librería principal del calendario -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/calendar.js"></script>
+  <!-- librería para cargar el lenguaje deseado -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/calendar-es.js"></script>
+  <!-- librería que declara la función Calendar.setup, que ayuda a generar un calendario en unas pocas líneas de código -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/calendar-setup.js"></script>
+{% endblock %}
+{% block contenidos %}
+<link rel="stylesheet" type="text/css" href="/static/css/formularios.css">
+<style type="text/css">
+
+	section{
+		display: none;
+	}
+	
+</style>
+<script type="text/javascript">
+/*$(document).on('ready',verFormulario);
+function verFormulario(){
+	$('.card').hide();
+	$('#not').click(function(){
+		$('.card').show(1000);
+		$('#not').hide();
+	});
+}*/
+</script>
+<script type="text/javascript">
+	function ventanaSecundaria(URL){
+                window.open(URL,"Editar","width=500,height=300,scrollbars=NO top=150 left=550");
+            }
+</script>
+<!--<button id='not' class="waves-effect waves-light btn">Responder</button>-->
+<div id="comentario">
+{% for mult in multa %}	
+	<li><a href="javascript:ventanaSecundaria('/detDenuncias/{{mult.id}}/')">{{ mult.Usuario}}- Notifico:  {{mult.descripcion}}      Cod:{{mult.Codigo}}</a></li>	
+{% endfor %}
+<li class='cuenta'>Numero de Notificaciones registradas hasta la fecha: {{cont}}      <a href="/TodaslasNotificaciones/">Ver Todos</a></li>
+</div>
+<div class="card">
+<form method='POST'>{% csrf_token %}
+					<input type='hidden' name='csrfmiddlewaretoken' value='xVJkmM4l7vuK6cX1520xfqRh3EgHAEEa' />
+					<input id="id_idUser" name="idUser" value='{{user.id}}' type="hidden">
+					<tr><th><label for="id_Usuario">Usuario:{{user.username}}</label></th><td>
+<input id="id_Usuario" maxlength="100" name="Usuario" type="hidden" value='{{user.username}}' /></td></tr>
+<tr><th><label for="id_descripcion">Descripcion:</label>
+</th><td><textarea cols="40" id="id_descripcion" name="descripcion" rows="10" required>
+</textarea></td></tr>
+<tr><th><label for="id_Codigo">Codigo:</label></th>
+	<td><input id="id_Codigo" name="Codigo" type="number" required/></td></tr>
+<tr><th><label for="id_fecha_presentacion">Fecha presentacion:</label></th><td>
+	<input id="id_fecha_presentacion" name="fecha_presentacion" type="text" placeholder='Año-Mes-Dia' />
+</td><input type="button" id="lanzador" value="..." /></tr>
+<tr><th><label for="id_hora">Hora:</label></th><td>
+	<input id="id_hora" maxlength="12" name="hora" type="text" required/></td></tr><br>
+<!--class="waves-effect waves-light btn"-->
+					<button name='btn' id='boton'>Enviar</button>
+				</form>
+</div>
+	<script src="/static/js/jquery.min3.js"></script>
+	<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script>
+	var socket = io.connect("http://localhost:3000");
+	var cont=0;
+	$('#boton').on('click',	Comentar);
+	//alert('as echo clik en enviars') 
+	function Comentar(e){
+		e.preventDefault();
+		var dato = {
+			//user: "{{name}}",
+			idUser:$('#id_idUser').val(),
+			Usuario:$('#id_Usuario').val(),
+			descripcion:$('#id_descripcion').val(),
+			Codigo:$('#id_Codigo').val(),
+			fecha_presentacion:$('#id_fecha_presentacion').val(),
+			hora:$('#id_hora').val()
+		}
+		//console.log(dato);//hasta aki llega optine los datos al hacer click
+		//nuevo comentario es el evento que enviamos el servidor
+		if (dato.idUser.length<0 || dato.Usuario.length==0 || dato.descripcion.length<1 || dato.Codigo.length==0 || dato.fecha_presentacion.length==0 || dato.hora.length==0){
+			alert('Dejo Campos en blanco Verifique por favor...');
+		}
+		else{
+			socket.emit('notificacion', dato);
+			cont=cont+1;
+			socket.emit('notificaciones',cont);
+		}
+	}
+	socket.on('devolviendo', function(data){
+		var data =JSON.parse(data);
+		//alert('escucho el evento devolvien el el cliente');
+		$("#comentario").prepend("<p>"+data.Usuario+ "  :Notifico:   " +data.descripcion+"Cod:    "+data.Codigo+"</p>");
+		$('.cuenta').html("Numero de Notificaciones registradas hasta la fecha:"+data.cont+"<a href='/TodaslasNotificaciones/'>            Ver Todos</a>");
+		//$("#id_comment").val("");
+	});
+	/*$(document).ready(function(){
+			socket.on('Avisos', function(data){
+			alert(data);
+		});
+	});*/
+</script>
+{% endblock %}
+

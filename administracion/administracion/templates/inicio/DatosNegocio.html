@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}.:Denuncias:.{% endblock %}
+{% block contenidos %}
+<link rel="stylesheet" type="text/css" href="/static/css/formularios.css">
+<script type="text/javascript">
+	function ventanaSecundaria(URL){
+                window.open(URL,"Editar","width=500,height=300,scrollbars=NO top=150 left=550");
+            } 
+</script>
+<style type="text/css">
+	#leftt{
+		display: none;
+	}
+</style>
+<div id="comentario">
+	<li>Propietario: {{nego.propietario}}</li>
+{% for i in datosN %}
+		<li>{{i.Usuario}}   <label>: Fecha de Notificacion:</label>
+		<a href="javascript:ventanaSecundaria('/detDenuncias/{{i.id}}/')">{{i.fecha_notificacion}}</a></li>
+{% endfor %}
+<li><a href="/VertodasNotiicaciones/{{nego.id}}/">Ver todos</a></li>
+</div>
+
+{% endblock %}

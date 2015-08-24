@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}.:Denuncias:.{% endblock %}
+{% block js %}
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#fer').on('click',	iniciar);
+			function iniciar(e){
+				e.preventDefault();
+				var fecha={
+					'fe':$('#campo_fecha').val(),
+					'fn':$('#campo_fecha_fin').val()
+				}
+				//console.log(fecha);
+				$.ajax({
+				type:'get',
+				url:'/ConsultarDenunciaClienteFecha/',
+				data: fecha,
+				success:function(data){
+					//console.log(data);
+					var html=""
+					for(var i = 0; i<data.length; i++){
+						html += '<li>'+(i+1)+' .- '+data[i].fields.user+':  Fecha:  '+data[i].fields.fecha_denuncia+'  Descricion:  '+data[i].fields.comment+'</li><br>';
+					}
+					$('#notiii').html(html);
+				}
+			});
+		}
+		Calendar.setup({
+		        inputField     :    "campo_fecha",      // id del campo de texto
+		        ifFormat       :    "%Y-%m-%d",       // formato de la fecha, cuando se escriba en el campo de texto
+		        button         :    "lanzador"   // el id del botón que lanzará el calendario
+		    });
+		Calendar.setup({
+		        inputField     :    "campo_fecha_fin",      // id del campo de texto
+		        ifFormat       :    "%Y-%m-%d",       // formato de la fecha, cuando se escriba en el campo de texto
+		        button         :    "lanzador2"   // el id del botón que lanzará el calendario
+		    });
+		
+    });
+function ventanaSecundaria(URL){
+                window.open(URL,"Editar","width=500,height=300,scrollbars=NO top=150 left=550");
+            } 
+</script>
+<link rel="stylesheet" type="text/css" media="all" href="{{STATIC_URL}}css/calendar-green.css" title="win2k-cold-1" />
+  <!-- librería principal del calendario -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/calendar.js"></script>
+  <!-- librería para cargar el lenguaje deseado -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/calendar-es.js"></script>
+  <!-- librería que declara la función Calendar.setup, que ayuda a generar un calendario en unas pocas líneas de código -->
+  <script type="text/javascript" src="{{STATIC_URL}}js/calendar-setup.js"></script>
+{% endblock %}
+{% block contenidos %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/listas.css">
+<script type="text/javascript">
+function ventanaSecundaria(URL){
+                window.open(URL,"Editar","width=500,height=300,scrollbars=NO top=150 left=550");
+    }
+</script>
+<div class="card">
+	<p>Lista de Denuncias Gestion: {% now "Y" %}</p>
+	<form method='get' id='filtro'>{% csrf_token %}
+				<input type='text' name="date"  id="campo_fecha" placeholder='Año-Mes-Dia'>
+				<input type="button" id="lanzador" value="..." />
+				<input type='text' name='fnn' id='campo_fecha_fin' placeholder='Año-Mes-Dia'><input type="button" id="lanzador2" value="..." />
+				<button id='fer'>Ver</button>
+	</form>
+	{%  for i in cs %}
+		<ul class='nn'>
+			<li>Cliente:  {{i.user}} 
+		<!-- <li>Denuncio: {{i.comment}}</li>
+		<li>Cod Negocio: {{i.idNegocio}}</li> -->
+			<a href="javascript:ventanaSecundaria('/DetalleDenuncias/{{i.id}}/')">Ver</a>
+			</li>
+		</ul>	 
+	{% endfor %}
+</div>
+{% endblock %}

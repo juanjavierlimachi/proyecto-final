@@ -1,0 +1,23 @@
+{% extends 'inspector/inicio_inspector.html' %}
+
+{% block inspecciones %}
+<link rel="stylesheet" type="text/css" href="/static/css/frontends.css">
+<link rel="stylesheet" type="text/css" href="/static/css/formularios.css">
+<link rel="stylesheet" type="text/css" href="/static/css/styleLi.css">
+<script type="text/javascript">
+	function ventanaSecundaria(URL){
+                window.open(URL,"Editar","width=500,height=300,scrollbars=NO top=150 left=400");
+            }
+</script>
+<div class="card" id='info'>
+	<li>{{user.username}}</li>
+{% for i in notificacion %}
+	{% if user.id == i.idUser %}
+		<ul>
+			<li>{{i.descripcion}}</li>
+		<li><a href="javascript:ventanaSecundaria('/EditarNotificacion/{{i.id}}/')">{{i.fecha_notificacion}}</a></li>
+		</ul>
+	{% endif %}
+{% endfor %}
+</div>
+{% endblock %}

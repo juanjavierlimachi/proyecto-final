@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block contenidos %}
+<style type="text/css">
+    #leftt{
+        display: none;
+    }
+</style>
+<script type="text/javascript">
+	$(document).ready(function($) {
+		$("#id_buscar").keyup(function(e) {
+			if (e.which!=8)
+			{
+				$.ajax({
+					type:'POST',
+					url:'/busqueda/',
+					data:$("#buscarForm").serialize(),
+					success:resultado,
+					error:errores
+				});
+			}
+		});
+	});
+	function resultado(data){
+		$("#resultados_buscar").html(data);
+		/*if($("#resultados_buscar").html()==''){
+			alert('no hay');
+		}*/
+	}
+	function errores(){
+		alert("error");
+	}
+</script>
+
+<div id="buscar">
+	<form action="" method="POST" id="buscarForm">
+		{% csrf_token %}
+		{{formulario}}
+	</form>
+</div>
+	<div id="resultados_buscar">
+
+	</div>
+</div>
+{% endblock %}

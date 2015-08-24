@@ -1,0 +1,20 @@
+<html>
+<head>
+	<title>Denuncia Cliente</title>
+</head>
+<body>
+<div class="card">
+	{% for i in denuncia %}
+		{% for j in nego %}
+			{% if i.idNegocio == j.id %}
+				<li>Cliente: {{i.user}}</li>
+				<li>Nota: {{i.comment}}</li>
+				<li>Direccion: {{j.direccion}}</li>
+				<li>Propietario: {{j.propietario}}</li>
+				<li>Fecha: {{i.fecha_denuncia}}</li>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+</div>
+</body>
+</html>
